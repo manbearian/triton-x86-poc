@@ -1,0 +1,14 @@
+func.func @main() {
+    %c0 = arith.constant 0 : i32
+    %arg0 = memref.alloc() : memref<1024xi32>
+    %arg1 = memref.alloc() : memref<1024xf32>
+
+    %arg0ptr = memref.cast %arg0 : memref<1024xi32> to memref<*xi32>
+    %arg1ptr = memref.cast %arg1 : memref<1024xf32> to memref<*xf32>
+
+    call @kernel(%arg0ptr, %arg1ptr, %c0, %c0, %c0) : (memref<*xi32>, memref<*xf32>, i32, i32, i32) -> ()
+
+    memref.dealloc %arg0 : memref<1024xi32>
+    memref.dealloc %arg1 : memref<1024xf32>
+    return
+  }
